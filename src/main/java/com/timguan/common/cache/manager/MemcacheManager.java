@@ -66,7 +66,7 @@ public class MemcacheManager extends CacheManager {
         T result = null;
         Object obj = memcachedClient.get(key);
         if (obj != null) {
-            result = (T)obj;
+            result = (T) obj;
         }
         return result;
     }
@@ -99,7 +99,8 @@ public class MemcacheManager extends CacheManager {
             //纳秒
             long begin = System.nanoTime();
             do {
-                if (innerCas(key, 0, expire, key)) {
+//                if (innerCas(key, 0, expire, key)) {
+                if (memcachedClient.add(key, expire, key).getStatus().isSuccess()) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("[Cache]get {} lock success,set expire {}", key, expire);
                     }

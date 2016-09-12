@@ -56,10 +56,13 @@ public class ConcurrentHtmlCacheHandler extends HtmlCacheHandler {
                     if (lock.tryLock(0, TimeUnit.MICROSECONDS)) {//锁被占用说明已经有线程在处理更新，放弃本次缓存刷新
                         try {
                             if (logger.isInfoEnabled()) {
-                                logger.info("[Cache]{}获取更新锁成功!", cacheKey);
+                                logger.info("[Cache]{}获取本地更新锁成功!", cacheKey);
                             }
                             //分布式锁
                             if (getCacheManager().tryLock(cacheKey, 0, (int) html.getTimeToLiveSeconds())) {
+                                if (logger.isInfoEnabled()) {
+                                    logger.info("[Cache]{}获取分布式更新锁成功!", cacheKey);
+                                }
                                 try {
                                     Html tmpHtml = buildHtml(request, response, chain, cacheKey);
                                     if ((tmpHtml != null && tmpHtml.isOk())) {
@@ -93,7 +96,7 @@ public class ConcurrentHtmlCacheHandler extends HtmlCacheHandler {
                         } finally {
                             //释放锁
                             if (logger.isInfoEnabled()) {
-                                logger.info("[Cache]{}释放更新锁!", cacheKey);
+                                logger.info("[Cache]{}释放本地更新锁!", cacheKey);
                             }
                             lock.unlock();
                         }
@@ -106,8 +109,8 @@ public class ConcurrentHtmlCacheHandler extends HtmlCacheHandler {
                     logger.warn("[Cache]" + cacheKey + "获取更新锁失败,将过期内容返回!", e);
                 }
             } else {
-                if (logger.isInfoEnabled()) {
-                    logger.info("[Cache]{}缓存命中，且未过期，直接返回!", cacheKey);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("[Cache]{}缓存命中，且未过期，直接返回!", cacheKey);
                 }
             }
         } else {
