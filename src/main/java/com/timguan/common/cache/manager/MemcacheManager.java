@@ -47,7 +47,7 @@ public class MemcacheManager extends CacheManager {
             return this;
         }
 
-        public Builder setUsernames(String username) {
+        public Builder setUsername(String username) {
             this.username = username;
             logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PORT + "={}", username);
             return this;

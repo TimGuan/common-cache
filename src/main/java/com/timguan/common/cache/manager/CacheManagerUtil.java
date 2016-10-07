@@ -38,6 +38,8 @@ public class CacheManagerUtil {
                 cacheManager = new MemcacheManager.Builder(namespace, env)
                         .setHost(confLoaderUtilInstance.getString(Constants.CONFIG_KEY_MEMCACHE_HOST, null))
                         .setPort(confLoaderUtilInstance.getString(Constants.CONFIG_KEY_MEMCACHE_PORT, null))
+                        .setUsername(confLoaderUtilInstance.getString(Constants.CONFIG_KEY_MEMCACHE_USERNAME, null))
+                        .setPassword(confLoaderUtilInstance.getString(Constants.CONFIG_KEY_MEMCACHE_PASSWORD, null))
                         .build();
                 break;
             case REDIS:
