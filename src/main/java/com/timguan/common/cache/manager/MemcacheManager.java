@@ -49,13 +49,13 @@ public class MemcacheManager extends CacheManager {
 
         public Builder setUsername(String username) {
             this.username = username;
-            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PORT + "={}", username);
+            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_USERNAME + "={}", username);
             return this;
         }
 
         public Builder setPassword(String password) {
             this.password = password;
-            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PORT + "={}", password);
+            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PASSWORD + "={}", password);
             return this;
         }
 
