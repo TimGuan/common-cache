@@ -43,6 +43,14 @@ public class Constants {
      */
     public static final String CONFIG_KEY_MEMCACHE_PORT = "com.timguan.commoncache.cache.memcache.port";
     /**
+     * memcache username
+     */
+    public static final String CONFIG_KEY_MEMCACHE_USERNAME = "com.timguan.commoncache.cache.memcache.username";
+    /**
+     * memcache password
+     */
+    public static final String CONFIG_KEY_MEMCACHE_PASSWORD = "com.timguan.commoncache.cache.memcache.password";
+    /**
      * redis 哨兵配置
      */
     public static final String CONFIG_KEY_REDIS_SENTIENLS = "com.timguan.commoncache.cache.redis.sentienls";

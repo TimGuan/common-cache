@@ -3,6 +3,8 @@ package com.timguan.common.cache.manager;
 import com.timguan.common.cache.common.CacheLoggerUtil;
 import com.timguan.common.cache.common.Constants;
 import net.spy.memcached.*;
+import net.spy.memcached.auth.AuthDescriptor;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import java.util.concurrent.TimeUnit;
@@ -26,6 +28,8 @@ public class MemcacheManager extends CacheManager {
     public static class Builder extends AbstractCacheManagerBuilder {
         private String host;
         private String port;
+        private String username;
+        private String password;
 
         public Builder(String namespace, String env) {
             super(namespace, env);
@@ -43,11 +47,33 @@ public class MemcacheManager extends CacheManager {
             return this;
         }
 
+        public Builder setUsernames(String username) {
+            this.username = username;
+            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PORT + "={}", username);
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            logger.info("[MemcacheHelper.init]" + Constants.CONFIG_KEY_MEMCACHE_PORT + "={}", password);
+            return this;
+        }
+
+
         public MemcacheManager build() {
             MemcachedClient memcachedClient = null;
             try {
-                memcachedClient = new MemcachedClient(new ConnectionFactoryBuilder().setProtocol(ConnectionFactoryBuilder.Protocol.BINARY).build(),
-                        AddrUtil.getAddresses(host + ":" + port));
+                if (StringUtils.isNotBlank(this.username) &&
+                        StringUtils.isNotBlank(this.password)) {
+                    memcachedClient = new MemcachedClient(new ConnectionFactoryBuilder()
+                            .setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
+                            .setAuthDescriptor(AuthDescriptor.typical(this.username,this.password))
+                            .build(),
+                            AddrUtil.getAddresses(host + ":" + port));
+                } else {
+                    memcachedClient = new MemcachedClient(new ConnectionFactoryBuilder().setProtocol(ConnectionFactoryBuilder.Protocol.BINARY).build(),
+                            AddrUtil.getAddresses(host + ":" + port));
+                }
             } catch (Exception e) {
                 throw new RuntimeException("[MemcacheHelper.init]can't initialize memcache client!", e);
             }
