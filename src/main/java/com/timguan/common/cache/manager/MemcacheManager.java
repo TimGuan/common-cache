@@ -4,6 +4,7 @@ import com.timguan.common.cache.common.CacheLoggerUtil;
 import com.timguan.common.cache.common.Constants;
 import net.spy.memcached.*;
 import net.spy.memcached.auth.AuthDescriptor;
+import net.spy.memcached.auth.PlainCallbackHandler;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
@@ -65,9 +66,10 @@ public class MemcacheManager extends CacheManager {
             try {
                 if (StringUtils.isNotBlank(this.username) &&
                         StringUtils.isNotBlank(this.password)) {
+                    AuthDescriptor ad = new AuthDescriptor(new String[]{"PLAIN"}, new PlainCallbackHandler(this.username, this.password));
                     memcachedClient = new MemcachedClient(new ConnectionFactoryBuilder()
                             .setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
-                            .setAuthDescriptor(AuthDescriptor.typical(this.username,this.password))
+                            .setAuthDescriptor(ad)
                             .build(),
                             AddrUtil.getAddresses(host + ":" + port));
                 } else {
